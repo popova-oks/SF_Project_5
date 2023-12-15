@@ -26,7 +26,6 @@ bool Chat::notify() {
             std::cout << mess_from_client << "\n";
             switch(event) {
             case 1: {
-                std::cout << "Registration!";
                 break;
             }
             case 2: { 
@@ -37,6 +36,7 @@ bool Chat::notify() {
             }
             }
         }
+        return true;
     }
 }
 
