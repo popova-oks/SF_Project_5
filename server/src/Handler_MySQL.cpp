@@ -30,13 +30,13 @@ void Handler_MySQL::create_connection_BD() {
         return;
     }
     // Создаем таблицы в БД
-    //create_tables();
+    create_tables();
 }
 
 int Handler_MySQL::add_User(std::string& data) {
     std::string query_toBD = "INSERT INTO users(id, name, login, password) values(default, ";
     query_toBD.append(data);
-     query_toBD.append(")");
+    query_toBD.append(")");
     mysql_query(mysql_, query_toBD.c_str());
     mysql_query(mysql_, "SELECT * FROM users"); //Делаем запрос к таблице
 
@@ -54,15 +54,24 @@ int Handler_MySQL::add_User(std::string& data) {
 }
 
 void Handler_MySQL::create_tables() {
-    std::string query_toBD =
+    std::string query_toBD1 =
         "CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT "
         "NULL, login VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)";
 
+    query_to_BD(query_toBD1);
+
+    std::string query_toBD2 = "CREATE TABLE IF NOT EXISTS messages(id INT AUTO_INCREMENT PRIMARY "
+                              "KEY, id_reciver INT NOT NULL "
+                              "REFERENCES users(id), id_sender INT NOT NULL REFERENCES users(id), "
+                              "message VARCHAR(100) NOT NULL)";
+
+   query_to_BD(query_toBD2);
+}
+
+// Cоздание запроса к БД
+void Handler_MySQL::query_to_BD(std::string& query) {
     // Подготовка запроса для таблицы users
-    if(mysql_stmt_prepare(
-           stmt_,
-           query_toBD.c_str(),
-           query_toBD.length()) != 0) {
+    if(mysql_stmt_prepare(stmt_, query.c_str(), query.length()) != 0) {
         std::cout << "Error: can't prepare statement for users table" << std::endl;
         return;
     }
@@ -70,25 +79,6 @@ void Handler_MySQL::create_tables() {
     // Выполнение подготовленного запроса для таблицы users
     if(mysql_stmt_execute(stmt_) != 0) {
         std::cout << "Error: can't execute statement for users table" << std::endl;
-        return;
-    }
-
-    std::string query_toBD2 =
-    "CREATE TABLE IF NOT EXISTS messages(id INT AUTO_INCREMENT PRIMARY KEY, id_reciver INT NOT NULL "
-    "REFERENCES users(id), id_sender INT NOT NULL REFERENCES users(id), message VARCHAR(100) NOT NULL)";
-    
-    // Подготовка запроса для таблицы messages
-    if(mysql_stmt_prepare(
-           stmt_,
-           query_toBD2.c_str(),
-           query_toBD2.length()) != 0) {
-        std::cout << "Error: can't prepare statement for messages table" << std::endl;
-        return;
-    }
-
-    // Выполнение подготовленного запроса для таблицы messages
-    if(mysql_stmt_execute(stmt_) != 0) {
-        std::cout << "Error: can't execute statement for messages table" << std::endl;
         return;
     }
 }

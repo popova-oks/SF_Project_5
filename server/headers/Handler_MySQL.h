@@ -8,12 +8,6 @@ public:
     ~Handler_MySQL();
     int add_User (std::string &data);
 
-
-
-
-
-
-
 private:
 // Объекты для работы с БД
     MYSQL *mysql_;    
@@ -21,6 +15,7 @@ private:
     MYSQL_ROW *row_;  // Объявление строки результата
     MYSQL_STMT *stmt_; // Объявление указателя на запрос
 
-    void create_connection_BD ();  
+    void create_connection_BD ();
+    void query_to_BD (std::string &query);
     void create_tables ();  
 };

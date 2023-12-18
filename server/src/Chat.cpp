@@ -1,7 +1,19 @@
 #include "../headers/Chat.h"
+#include <cstring>
 #include <iostream>
 #include <limits>
-#include <cstring>
+
+
+Chat::Chat() {
+    Messages<std::string>* messages_ = new Messages<std::string>;
+    // Подкдючаем базу данных
+    handler_mysql_ = new Handler_MySQL;
+}
+Chat::~Chat() {
+    if(messages_ != nullptr) {
+        delete messages_;
+    }
+};
 
 /*
 void Chat::set_User(IObserver* observer) { all_users_.emplace_back(observer); }
@@ -16,9 +28,6 @@ bool Chat::notify() {
     if(messages_ == nullptr) {
         messages_ = new Messages<std::string>;
     }
-    // Подкдючаем базу данных
-    handler_mysql_ = new Handler_MySQL;
-
     std::string mess_from_client = messages_->get_messages();
     if(!mess_from_client.empty()) {
         if(strncmp(mess_from_client.c_str(), "exit", strlen(mess_from_client.c_str())) == 0) {
@@ -33,7 +42,7 @@ bool Chat::notify() {
                 set_User(mess_from_client);
                 break;
             }
-            case 2: { 
+            case 2: {
                 break;
             }
             default: {
@@ -45,38 +54,35 @@ bool Chat::notify() {
     }
 }
 
-void Chat::set_User(std::string &mess_from_client) {
-    handler_mysql_;
+void Chat::set_User(std::string& mess_from_client) { handler_mysql_; }
 
-}
+/*
+if(!list_observers_.empty()) {
+    if(messages_ == nullptr) {
+        messages_ = new Messages<std::string>;
+    }
 
-    /*
-    if(!list_observers_.empty()) {
-        if(messages_ == nullptr) {
-            messages_ = new Messages<std::string>;
-        }
+    if(event == 's') {
+        std::cout << "\nSend to a user. Enter login : ";
+        std::string login;
+        std::cin >> login;
 
-        if(event == 's') {
-            std::cout << "\nSend to a user. Enter login : ";
-            std::string login;
-            std::cin >> login;
+        std::cout << "\nEnter your message: ";
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-            std::cout << "\nEnter your message: ";
-            std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::string message;
+        std::getline(std::cin, message);
+        std::string log_sender = user->get_login();
 
-            std::string message;
-            std::getline(std::cin, message);
-            std::string log_sender = user->get_login();
-
-            nlohmann::json created_message = messages_->create_message(log_sender, login, message);
-            if(!created_message.is_null()) {
-                messages_->save_message(created_message);
-                // отсылаем сообщение серверу
-                messages_->send_message(created_message);
-            }
+        nlohmann::json created_message = messages_->create_message(log_sender, login, message);
+        if(!created_message.is_null()) {
+            messages_->save_message(created_message);
+            // отсылаем сообщение серверу
+            messages_->send_message(created_message);
         }
     }
-    */
+}
+*/
 
 /*
 void Chat::receive_message() {

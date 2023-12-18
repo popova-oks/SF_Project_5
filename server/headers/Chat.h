@@ -5,8 +5,8 @@
 
 class Chat : public ISubject {
   public:
-    Chat() {Messages<std::string>* messages_ = new Messages<std::string>;}
-    virtual ~Chat() {if (messages_ != nullptr) {delete messages_;}};
+    Chat();
+    virtual ~Chat();
     bool notify() override;
     void set_User(std::string &date) override;
   
