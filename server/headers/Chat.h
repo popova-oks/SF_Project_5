@@ -1,20 +1,17 @@
 #pragma once
 #include "ISubject.h"
 #include "Messages.h"
-#include <iostream>
-#include <string>
-#include <list>
-#include <vector>
-
+#include "Handler_MySQL.h"
 
 class Chat : public ISubject {
   public:
     Chat() {Messages<std::string>* messages_ = new Messages<std::string>;}
     virtual ~Chat() {if (messages_ != nullptr) {delete messages_;}};
     bool notify() override;
+    void set_User(std::string &date) override;
   
   /*    
-    void set_User(IObserver* observer) override;
+    
     void attach(IObserver* observer) override;
     void detach(IObserver* observer) override;
     
@@ -33,4 +30,5 @@ class Chat : public ISubject {
     std::list<IObserver*> list_observers_{};
   */
     Messages<std::string>* messages_ = nullptr;
+    Handler_MySQL *handler_mysql_;
 };

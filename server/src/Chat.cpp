@@ -1,4 +1,5 @@
 #include "../headers/Chat.h"
+#include <iostream>
 #include <limits>
 #include <cstring>
 
@@ -15,6 +16,9 @@ bool Chat::notify() {
     if(messages_ == nullptr) {
         messages_ = new Messages<std::string>;
     }
+    // Подкдючаем базу данных
+    handler_mysql_ = new Handler_MySQL;
+
     std::string mess_from_client = messages_->get_messages();
     if(!mess_from_client.empty()) {
         if(strncmp(mess_from_client.c_str(), "exit", strlen(mess_from_client.c_str())) == 0) {
@@ -26,6 +30,7 @@ bool Chat::notify() {
             std::cout << mess_from_client << "\n";
             switch(event) {
             case 1: {
+                set_User(mess_from_client);
                 break;
             }
             case 2: { 
@@ -38,6 +43,11 @@ bool Chat::notify() {
         }
         return true;
     }
+}
+
+void Chat::set_User(std::string &mess_from_client) {
+    handler_mysql_;
+
 }
 
     /*

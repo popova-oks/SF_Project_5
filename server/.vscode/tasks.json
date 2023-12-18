@@ -20,7 +20,9 @@
                 "src/*.cpp",
                 "-o",
                 "${workspaceFolder}/build/main",
-                "-I${workspaceFolder}/json/include"  // Добавьте этот аргумент для указания пути к заголовкам
+                "-I/usr/include/mysql",  // Путь к заголовкам MySQL Connector/C++
+                "-L/usr/lib/x86_64-linux-gnu",  // Путь к библиотекам MySQL Connector/C++
+                "-lmysqlclient"  // Имя библиотеки MySQL Connector/C++
             ],
             "options": {
                 "cwd": "${workspaceFolder}"

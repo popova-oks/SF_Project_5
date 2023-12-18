@@ -40,7 +40,7 @@ bool User::update(int event) {
         password = sha1(password);
         std::string mess_new_user = "1'"+ name + "', '" + login + "', '" + password + "'";
         if (messages_->send_message (mess_new_user) >= 0) {
-            return true;;
+            return true;
         } else {
             return false;
         }        

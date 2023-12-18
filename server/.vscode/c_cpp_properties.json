@@ -4,8 +4,16 @@
             "name": "Linux",
             "includePath": [
                 "${workspaceFolder}/**",
-                "${workspaceFolder}/json/include/"
+                "/usr/include/mysql"
             ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}/**",
+                    "/usr/include/mysql"
+                ],
+                "limitSymbolsToIncludedHeaders": true,
+                "databaseFilename": ""
+            },
             "defines": [],
             "compilerPath": "/usr/bin/gcc",
             "cStandard": "c17",
