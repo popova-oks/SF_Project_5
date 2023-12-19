@@ -1,7 +1,7 @@
 #include "../headers/Handler_MySQL.h"
 
 Handler_MySQL::Handler_MySQL()
-    : mysql_(mysql_init(nullptr)), res_(nullptr), row_(nullptr), stmt_(nullptr) {
+    : mysql_(mysql_init(nullptr)), res_(nullptr), stmt_(nullptr) {
     create_connection_BD();
 }
 
@@ -34,17 +34,19 @@ void Handler_MySQL::create_connection_BD() {
 }
 
 int Handler_MySQL::add_User(std::string& data) {
-    std::string query_toBD = "INSERT INTO users(id, name, login, password) values(default, ";
+    std::string query_toBD = "INSERT users (id, name, login, password) values (default, ";
     query_toBD.append(data);
     query_toBD.append(")");
-    mysql_query(mysql_, query_toBD.c_str());
-    mysql_query(mysql_, "SELECT * FROM users"); //Делаем запрос к таблице
 
+    query_to_BD(query_toBD);
+
+    mysql_query(mysql_, "SELECT * FROM users");       //Делаем запрос к таблице
     //Выводим все что есть в таблице через цикл
     if(res_ = mysql_store_result(mysql_)) {
-        while(*row_ = mysql_fetch_row(res_)) {
+        MYSQL_ROW row;  // Объявление строки результата
+        while(row = mysql_fetch_row(res_)) {
             for(int i = 0; i < mysql_num_fields(res_); i++) {
-                std::cout << row_[i] << "  ";
+                std::cout << row[i] << "  ";
             }
             std::cout << std::endl;
         }
@@ -56,16 +58,16 @@ int Handler_MySQL::add_User(std::string& data) {
 void Handler_MySQL::create_tables() {
     std::string query_toBD1 =
         "CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT "
-        "NULL, login VARCHAR(100) NOT NULL, password VARCHAR(100) NOT NULL)";
+        "NULL, login VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL)";
 
     query_to_BD(query_toBD1);
 
     std::string query_toBD2 = "CREATE TABLE IF NOT EXISTS messages(id INT AUTO_INCREMENT PRIMARY "
-                              "KEY, id_reciver INT NOT NULL "
-                              "REFERENCES users(id), id_sender INT NOT NULL REFERENCES users(id), "
-                              "message VARCHAR(100) NOT NULL)";
+                              "KEY, id_reciver INT NOT NULL, id_sender INT NOT NULL, message VARCHAR(100))";
+    query_to_BD(query_toBD2);
 
-   query_to_BD(query_toBD2);
+    std::string query_toBD3 = "ALTER TABLE messages ADD FOREIGN KEY (id_reciver) REFERENCES users(id)";
+    query_to_BD(query_toBD3);
 }
 
 // Cоздание запроса к БД
@@ -75,7 +77,6 @@ void Handler_MySQL::query_to_BD(std::string& query) {
         std::cout << "Error: can't prepare statement for users table" << std::endl;
         return;
     }
-
     // Выполнение подготовленного запроса для таблицы users
     if(mysql_stmt_execute(stmt_) != 0) {
         std::cout << "Error: can't execute statement for users table" << std::endl;

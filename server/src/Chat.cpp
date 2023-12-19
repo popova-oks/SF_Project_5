@@ -54,7 +54,11 @@ bool Chat::notify() {
     }
 }
 
-void Chat::set_User(std::string& mess_from_client) { handler_mysql_; }
+void Chat::set_User(std::string& data) {
+    if(handler_mysql_ != nullptr) {
+        handler_mysql_->add_User(data);
+    }
+}
 
 /*
 if(!list_observers_.empty()) {

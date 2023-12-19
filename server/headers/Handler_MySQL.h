@@ -12,7 +12,6 @@ private:
 // Объекты для работы с БД
     MYSQL *mysql_;    
     MYSQL_RES *res_; // Объявление указателя на результат
-    MYSQL_ROW *row_;  // Объявление строки результата
     MYSQL_STMT *stmt_; // Объявление указателя на запрос
 
     void create_connection_BD ();
