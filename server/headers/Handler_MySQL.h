@@ -7,6 +7,7 @@ public:
     Handler_MySQL();
     ~Handler_MySQL();
     int add_User (std::string &data);
+    void show_attachedUsers();   
 
 private:
 // Объекты для работы с БД
@@ -16,5 +17,6 @@ private:
 
     void create_connection_BD ();
     void query_to_BD (std::string &query);
-    void create_tables ();  
+    void create_tables ();
+    bool check_user(std::string& data);
 };

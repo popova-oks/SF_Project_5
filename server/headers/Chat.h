@@ -9,6 +9,7 @@ class Chat : public ISubject {
     virtual ~Chat();
     bool notify() override;
     void set_User(std::string &date) override;
+    void display_listObservers();
   
   /*    
     
@@ -31,4 +32,5 @@ class Chat : public ISubject {
   */
     Messages<std::string>* messages_ = nullptr;
     Handler_MySQL *handler_mysql_;
+    
 };

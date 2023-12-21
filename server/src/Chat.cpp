@@ -60,6 +60,10 @@ void Chat::set_User(std::string& data) {
     }
 }
 
+void Chat::display_listObservers() {
+    handler_mysql_->show_attachedUsers();
+}
+
 /*
 if(!list_observers_.empty()) {
     if(messages_ == nullptr) {

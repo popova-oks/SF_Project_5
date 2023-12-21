@@ -21,6 +21,10 @@ void ClientCode::start() {
     while(flag) {
         if(chat != nullptr) {
             flag = chat->notify();
+            if (flag) {
+                chat->display_listObservers();
+                std::cout << "/nYou are attached!";
+            }
         }
     }
     // закрываем сокет, завершаем соединение
