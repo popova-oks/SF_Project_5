@@ -7,7 +7,8 @@ public:
     Handler_MySQL();
     ~Handler_MySQL();
     int add_User (std::string &data);
-    void show_attachedUsers();   
+    void show_attachedUsers();
+    std::string attachedUsers();
 
 private:
 // Объекты для работы с БД

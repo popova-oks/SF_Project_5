@@ -9,13 +9,14 @@ class User : public IObserver {
     User();
     virtual ~User() {}
     bool update (int event) override;
+    void show_messFromServer();
 
     //void display_Messages();
 
-
+    const std::string& get_login() const override { return login_; }
   /*
     const std::string& get_name() const override { return name_; }
-    const std::string& get_login() const override { return login_; }
+    
     const std::string& get_password() const override { return password_; }
     const int get_userID() const override { return user_ID_; }
 
@@ -34,11 +35,11 @@ class User : public IObserver {
   private:    
     Messages<std::string>* messages_ = nullptr;
     bool containsOnlyLettersNum(std::string const& str);
-
+    std::string login_{};
   /*
     Chat* chat_ = nullptr;
     std::string name_{};
-    std::string login_{};
+  
     std::string password_{};
     int user_ID_{0};
     bool is_autorization_{false};

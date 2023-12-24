@@ -18,13 +18,18 @@ void ClientCode::start() {
         return;
     }
     TCP_Server::processRequest();
+    TCP_Server::connection = accept(TCP_Server::socket_file_descriptor,
+                                  (struct sockaddr*)&TCP_Server::client, &TCP_Server::length);
+    if(TCP_Server::connection == -1) {
+        std::cout << "Server is unable to accept the data from client!" << std::endl;
+        flag = false;
+    }
     while(flag) {
         if(chat != nullptr) {
             flag = chat->notify();
-            if (flag) {
-                chat->display_listObservers();
-                std::cout << "/nYou are attached!";
-            }
+            //if (flag) {
+                //chat->display_listObservers();
+            //}
         }
     }
     // закрываем сокет, завершаем соединение

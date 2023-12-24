@@ -10,7 +10,7 @@ class Chat : public ISubject {
     bool notify() override;
     void set_User(std::string &date) override;
     void display_listObservers();
-  
+    void send_listUsers_toClient();
   /*    
     
     void attach(IObserver* observer) override;

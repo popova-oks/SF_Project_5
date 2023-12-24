@@ -5,6 +5,7 @@ template <typename T> class Messages {
     Messages(){};
     ~Messages(){};    
     T get_messages();
+    bool send_message(T& answ_message);
     //nlohmann::json create_message(const std::string &sender, const std::string &receiver, T message);    
     //void save_message(const nlohmann::json &json);
     //void send_message(const nlohmann::json &json);

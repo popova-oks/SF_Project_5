@@ -40,6 +40,7 @@ bool Chat::notify() {
             switch(event) {
             case 1: {
                 set_User(mess_from_client);
+                send_listUsers_toClient();
                 break;
             }
             case 2: {
@@ -57,6 +58,13 @@ bool Chat::notify() {
 void Chat::set_User(std::string& data) {
     if(handler_mysql_ != nullptr) {
         handler_mysql_->add_User(data);
+    }
+}
+
+void Chat::send_listUsers_toClient() {
+    std::string listUsers = handler_mysql_->attachedUsers();
+    if(!messages_->send_message(listUsers)) {
+        std::cout << "Data sending to the client failed!" << std::endl;;
     }
 }
 

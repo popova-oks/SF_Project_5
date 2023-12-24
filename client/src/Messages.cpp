@@ -1,36 +1,44 @@
 #include "../headers/Messages.h"
 #include "../headers/ConnectionTCP.h"
+#include <cstring>
 #include <fstream>
 #include <iostream>
 #include <string>
-#include <cstring>
 
-template <typename T> 
-int Messages<T>::send_message(const T &message) {    
+template <typename T> int Messages<T>::send_message(const T& message) {
     // открываем сокет клиента, создаем соединение с сервером
-    TCP_Client::processMessage();
+    //TCP_Client::processMessage();
     // передача сообщения через сокет
-    ssize_t bytes = send(TCP_Client::socket_file_descriptor, message.c_str(), strlen(message.c_str()), 0);    
+    ssize_t bytes =
+        send(TCP_Client::socket_file_descriptor, message.c_str(), strlen(message.c_str()), 0);
     // если передали >= 0  байт, значит пересылка прошла успешно
-    if(bytes >= 0) {
-        // очищаем буфер обмена клиента
-        //bzero(TCP_Client::buff, sizeof(TCP_Client::buff));
-
-        // Ждем ответа от сервера
-        //recv(TCP_Client::socket_file_descriptor, TCP_Client::buff, sizeof(TCP_Client::buff), 0);
-        //mess_from_server_.clear();
-        //mess_from_server_.append(TCP_Client::buff);
-    } else {
+    if(bytes == -1) {
         std::cout << "Data sending to the server failed!" << std::endl;
     }
     // очищаем буфер обмена клиента
-    //bzero(TCP_Client::buff, sizeof(TCP_Client::buff));
+    // bzero(TCP_Client::buff, sizeof(TCP_Client::buff));
     //закрываем сокет, завершаем соединение
-    close(TCP_Client::socket_file_descriptor);
+    //close(TCP_Client::socket_file_descriptor);
     return bytes;
 }
 
+template <typename T> T& Messages<T>::recive_message() {
+    // открываем сокет клиента, создаем соединение с сервером
+    //TCP_Client::processMessage();
+    // очищаем буфер обмена клиента
+    bzero(TCP_Client::buff, sizeof(TCP_Client::buff));
 
+    // Ждем ответа от сервера
+    ssize_t bytes =
+        recv(TCP_Client::socket_file_descriptor, TCP_Client::buff, sizeof(TCP_Client::buff), 0);
+    mess_from_server_.clear();
+    mess_from_server_.append(TCP_Client::buff);
+    // очищаем буфер обмена клиента
+    bzero(TCP_Client::buff, sizeof(TCP_Client::buff));
+    //закрываем сокет, завершаем соединение
+    //close(TCP_Client::socket_file_descriptor);
+    return mess_from_server_;
+}
 
 /*
 template <typename T> void Messages<T>::set_message(IObserver* sender, const T& message) {
@@ -85,7 +93,6 @@ template <typename T> void Messages<T>::save_message(const nlohmann::json& json)
     writeFile(pathJSON_, messagesArray);
 }
 */
-
 
 /*
 template <typename T> void Messages<T>::get_messages() {

@@ -12,11 +12,14 @@ void ClientCode::start() {
     User* user = nullptr;
     bool flag = true;
 
+    // открываем сокет клиента, создаем соединение с сервером
+    TCP_Client::processMessage();
+
     while(flag) {
         if(user == nullptr) {
             std::cout << "\nNo current User";
         } else {
-            std::cout << "\nThe current user:";
+            std::cout << "\nThe current user:" << user->get_login();
                      // << "\nname - " << user->get_name() << "\nlogin - " << user->get_login()
                       //<< "\nuser_ID - " << user->get_userID();
         }
@@ -30,11 +33,15 @@ void ClientCode::start() {
         case '1': {
             user = make_user();
             if(user != nullptr) {
-                std::cout << "\nUser was created!";
-                //user->display_Messages();
-
+                std::cout << "\nUser was created!" << std::endl;
+                user->show_messFromServer();
             }
             break;
+        }
+        case '2': {
+            if (user != nullptr) {
+                
+            }
         }
         /*
         case '2': {
@@ -90,6 +97,8 @@ void ClientCode::start() {
         std::cin.clear();
         std::cin.ignore(32767, '\n');
     }
+    //закрываем сокет, завершаем соединение
+    close(TCP_Client::socket_file_descriptor);
     std::cout << "\nSee you soon agan! " << std::endl;
 }
 

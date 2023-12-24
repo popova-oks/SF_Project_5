@@ -3,9 +3,7 @@
 #include <algorithm>
 #include <iostream>
 
-User::User() { 
-    messages_ = new Messages<std::string>(); 
-}
+User::User() { messages_ = new Messages<std::string>(); }
 
 bool User::update(int event) {
     if(event == 1) {
@@ -36,17 +34,26 @@ bool User::update(int event) {
             if(!OnlyLettersNum) {
                 continue;
             }
-        }
+        }        
         password = sha1(password);
-        std::string mess_new_user = "1'"+ name + "', '" + login + "', '" + password + "'";
-        if (messages_->send_message (mess_new_user) >= 0) {
+        std::string mess_new_user = "1'" + name + "', '" + login + "', '" + password + "'";
+        if(messages_->send_message(mess_new_user) >= 0) {
+            login_ = login;
             return true;
         } else {
             return false;
-        }        
+        }
+
     } else if(event == 2) {
     } else {
         return false;
+    }
+}
+
+void User::show_messFromServer() {
+    std::string mess = messages_->recive_message();
+    if(!mess.empty()) {
+        std::cout << mess << std::endl;
     }
 }
 

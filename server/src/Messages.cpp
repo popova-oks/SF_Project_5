@@ -1,8 +1,8 @@
 #include "../headers/Messages.h"
 #include "../headers/ConnectionTCP.h"
+#include <cstring>
 #include <fstream>
 #include <iostream>
-#include <cstring>
 
 /*
 template <typename T> Messages<T>::Messages() : pathJSON_{"./data.json"} {
@@ -106,16 +106,16 @@ template <typename T> T Messages<T>::get_messages() {
     // клиента. Функция блокируется (ожидает), пока клиент не попытается подключиться, и когда
     // клиентское подключение обнаружено, она создает новый соксет для общения с этим клиентом.
     ssize_t bytes = -1;
-    TCP_Server::connection = accept(TCP_Server::socket_file_descriptor,
-                                    (struct sockaddr*)&TCP_Server::client, &TCP_Server::length);
-    if(TCP_Server::connection == -1) {
-        std::cout << "Server is unable to accept the data from client!" << std::endl;
-    } else {
+    //TCP_Server::connection = accept(TCP_Server::socket_file_descriptor,
+                                   // (struct sockaddr*)&TCP_Server::client, &TCP_Server::length);
+    //if(TCP_Server::connection == -1) {
+        //std::cout << "Server is unable to accept the data from client!" << std::endl;
+    //} else {
         // очистить буфер!
-        bzero( TCP_Server::buff, sizeof(TCP_Server::buff));        
+        bzero(TCP_Server::buff, sizeof(TCP_Server::buff));
         // получаем сообщение от клиента
-        bytes = recv(TCP_Server::connection, TCP_Server::buff, sizeof(TCP_Server::buff), 0);        
-    }
+        bytes = recv(TCP_Server::connection, TCP_Server::buff, sizeof(TCP_Server::buff), 0);
+    //}
     if(bytes < 0) {
         return "Error receiving data from client!";
     } else if(bytes >= 0) {
@@ -123,6 +123,24 @@ template <typename T> T Messages<T>::get_messages() {
         mess_from_client_.append(TCP_Server::buff);
         return mess_from_client_;
     }
+}
+
+template <typename T> bool Messages<T>::send_message(T& answ_message) {
+    ssize_t bytes = -1;
+    //TCP_Server::connection = accept(TCP_Server::socket_file_descriptor,
+                                    //(struct sockaddr*)&TCP_Server::client, &TCP_Server::length);
+    //if(TCP_Server::connection == -1) {
+        //std::cout << "Server is unable to accept the data from client!" << std::endl;
+    //} else {
+        bytes = send(TCP_Server::connection, answ_message.c_str(), strlen(answ_message.c_str()), 0);
+    //}
+    // Если передали >= 0  байт, значит пересылка прошла успешно
+    if(bytes >= 0) {
+        return true;
+    } else {
+        std::cout << "Data sending to the client failed!" << std::endl;
+        return false;
+    }    
 }
 
 /*
