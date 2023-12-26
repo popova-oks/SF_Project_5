@@ -10,6 +10,7 @@ class User : public IObserver {
     virtual ~User() {}
     bool update (int event) override;
     void show_messFromServer();
+    void show_attachedUser();
 
     //void display_Messages();
 

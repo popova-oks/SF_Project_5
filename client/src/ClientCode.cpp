@@ -14,34 +14,58 @@ void ClientCode::start() {
 
     // открываем сокет клиента, создаем соединение с сервером
     TCP_Client::processMessage();
+    user = new User;
 
     while(flag) {
         if(user == nullptr) {
-            std::cout << "\nNo current User";
+            return;
+        }
+
+        std::cout << "\nAttached users:" << std::endl;
+        user->show_attachedUser();
+
+        if(user->get_login().empty()) {
+            std::cout << "No current user!" << std::endl;
         } else {
-            std::cout << "\nThe current user:" << user->get_login();
-                     // << "\nname - " << user->get_name() << "\nlogin - " << user->get_login()
-                      //<< "\nuser_ID - " << user->get_userID();
+            std::cout << "The current user: " << user->get_login();
+            // << "\nname - " << user->get_name() << "\nlogin - " << user->get_login()
+            //<< "\nuser_ID - " << user->get_userID();
         }
         std::cout << "\n\nSelect an action:" << std::endl;
-        std::cout << "1 - registration, 2 - log in the chat,";
+        std::cout << "1 - registration, 2 - attach in the chat,";
         std::cout << "\n3 - send messages, 4 - exit the chat,  5 - quit from the program: ";
         char ch;
         std::cin >> ch;
 
         switch(ch) {
         case '1': {
-            user = make_user();
+            user = make_user(user);
             if(user != nullptr) {
-                std::cout << "\nUser was created!" << std::endl;
+                //std::cout << "\nUser was created!" << std::endl;
+                //std::cout << "\nAttached users:" << std::endl;
                 user->show_messFromServer();
             }
             break;
         }
         case '2': {
-            if (user != nullptr) {
-                
+            user = attach_toChat(user);
+            if(user != nullptr) {
+                //std::cout << "\nAttached users:" << std::endl;
+                user->show_messFromServer();
             }
+            break;
+        }
+        case '3': {
+            
+            break;
+        }
+        case '4': {
+            user = detach_toChat(user);
+            if(user != nullptr) {
+                //std::cout << "\nAttached users:" << std::endl;
+                user->show_messFromServer();
+            }
+            break;
         }
         /*
         case '2': {
@@ -81,11 +105,11 @@ void ClientCode::start() {
         */
         case '5': {
             flag = false;
-            if (user != nullptr) {                
-            //закрыть сокет на сервере!!! Послать сообщение exit
-            //user->leave_chat(chat);
-            //delete user;
-            //user = nullptr;
+            if(user != nullptr) {
+                //закрыть сокет на сервере!!! Послать сообщение exit
+                user->update(5);
+                delete user;
+                user = nullptr;
             }
             break;
         }
@@ -102,19 +126,27 @@ void ClientCode::start() {
     std::cout << "\nSee you soon agan! " << std::endl;
 }
 
-User* ClientCode::make_user() {
-    try {
-        User* user = new User;
-        if(user->update(1)) {
-            return user;
-        } else {
-            delete user;
-            return nullptr;
-        }
-    } catch(const std::istream::failure& ex) {
-        std::cerr << "Failed to input: " << ex.what() << "\n";
-    } catch(...) {
-        std::cerr << "Some other exception\n";
+User* ClientCode::make_user(User* user) {
+    if(user->update(1)) {
+        return user;
+    } else {
+        return nullptr;
+    }
+}
+
+User* ClientCode::attach_toChat(User* user) {
+    if(user->update(2)) {
+        return user;
+    } else {
+        return nullptr;
+    }
+}
+
+User* ClientCode::detach_toChat(User* user) {
+    if(user->update(4)) {
+        return user;
+    } else {
+        return nullptr;
     }
 }
 

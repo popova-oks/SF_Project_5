@@ -20,7 +20,6 @@ bool User::update(int event) {
             if(!OnlyLettersNum) {
                 continue;
             }
-
             std::cout << "Enter your username: ";
             std::cin >> login;
             OnlyLettersNum = containsOnlyLettersNum(login);
@@ -34,7 +33,7 @@ bool User::update(int event) {
             if(!OnlyLettersNum) {
                 continue;
             }
-        }        
+        }
         password = sha1(password);
         std::string mess_new_user = "1'" + name + "', '" + login + "', '" + password + "'";
         if(messages_->send_message(mess_new_user) >= 0) {
@@ -43,10 +42,45 @@ bool User::update(int event) {
         } else {
             return false;
         }
+    } else if(event == 2 || event == 4) {
+        std::string login;
+        std::string password;
+        bool OnlyLettersNum = false;
+        while(!OnlyLettersNum) {
+            std::cout << "\nEnter only letters or numbers without using spaces or other symbols!\n";
 
-    } else if(event == 2) {
-    } else {
-        return false;
+            std::cout << "Enter your username: ";
+            std::cin >> login;
+            OnlyLettersNum = containsOnlyLettersNum(login);
+            if(!OnlyLettersNum) {
+                continue;
+            }
+            std::cout << "Enter your password: ";
+            std::cin >> password;
+            OnlyLettersNum = containsOnlyLettersNum(password);
+            if(!OnlyLettersNum) {
+                continue;
+            }
+        }
+        password = sha1(password);
+        std::string mess_new_user;
+        if(event == 2) {
+            mess_new_user = "2'" + login + "', '" + password + "'";
+        } else if (event == 4) {
+            mess_new_user = "4'" + login + "', '" + password + "'";
+        }
+        if(messages_->send_message(mess_new_user) >= 0) {
+            login_ = login;
+            return true;
+        } else {
+            return false;
+        }
+    } else if(event == 3) {
+        
+    } else if(event == 5) {
+        if(messages_->send_message("exit") >= 0) {
+            return true;
+        }
     }
 }
 
@@ -54,6 +88,14 @@ void User::show_messFromServer() {
     std::string mess = messages_->recive_message();
     if(!mess.empty()) {
         std::cout << mess << std::endl;
+    }
+}
+
+void User::show_attachedUser()
+{
+    std::string users = messages_->recive_message();
+    if(!users.empty()) {
+        std::cout << users << std::endl;
     }
 }
 

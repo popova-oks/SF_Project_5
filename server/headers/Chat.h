@@ -8,9 +8,12 @@ class Chat : public ISubject {
     Chat();
     virtual ~Chat();
     bool notify() override;
-    void set_User(std::string &date) override;
-    void display_listObservers();
+    //void set_User(std::string &date) override;
+    //void attach_User(std::string &date) override;
+    //void dettach_User(std::string &date) override;
+    //void display_listObservers();
     void send_listUsers_toClient();
+    void send_toClient(std::string mess);
   /*    
     
     void attach(IObserver* observer) override;

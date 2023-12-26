@@ -3,7 +3,6 @@
 #include <iostream>
 #include <limits>
 
-
 Chat::Chat() {
     Messages<std::string>* messages_ = new Messages<std::string>;
     // Подкдючаем базу данных
@@ -39,11 +38,32 @@ bool Chat::notify() {
             std::cout << mess_from_client << "\n";
             switch(event) {
             case 1: {
-                set_User(mess_from_client);
-                send_listUsers_toClient();
+                if (handler_mysql_->add_User(mess_from_client))
+                {
+                    send_toClient("User is created!");
+                } else {
+                    send_toClient("Fail!");
+                }
                 break;
             }
             case 2: {
+                //attach_User(mess_from_client);
+                if (handler_mysql_->attach_User(mess_from_client)) {
+                    send_toClient("User is attached!");
+                } else {
+                    send_toClient("Fail!");
+                }
+                break;
+            }
+            case 3: {
+                break;
+            }
+            case 4: {
+                if (handler_mysql_->detach_User(mess_from_client)) {
+                    send_toClient("User is detached!");
+                } else {
+                    send_toClient("Fail!");
+                }                
                 break;
             }
             default: {
@@ -55,22 +75,27 @@ bool Chat::notify() {
     }
 }
 
-void Chat::set_User(std::string& data) {
-    if(handler_mysql_ != nullptr) {
-        handler_mysql_->add_User(data);
+void Chat::send_toClient(std::string mess)
+{
+    if (mess.empty()){
+        mess.append("No message!");
+    }
+    if(!messages_->send_message(mess)) {
+        std::cout << "Data sending to the client failed!" << std::endl;
     }
 }
 
 void Chat::send_listUsers_toClient() {
     std::string listUsers = handler_mysql_->attachedUsers();
+    if (listUsers.empty()){
+        listUsers.append("No attached users!");
+    }
     if(!messages_->send_message(listUsers)) {
-        std::cout << "Data sending to the client failed!" << std::endl;;
+        std::cout << "Data sending to the client failed!" << std::endl;
     }
 }
 
-void Chat::display_listObservers() {
-    handler_mysql_->show_attachedUsers();
-}
+//void Chat::display_listObservers() { handler_mysql_->show_attachedUsers(); }
 
 /*
 if(!list_observers_.empty()) {

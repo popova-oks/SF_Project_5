@@ -6,8 +6,10 @@ class Handler_MySQL {
 public:
     Handler_MySQL();
     ~Handler_MySQL();
-    int add_User (std::string &data);
-    void show_attachedUsers();
+    bool add_User (const std::string &data);
+    bool attach_User(const std::string &data);
+    bool detach_User(const std::string &data);
+    //void show_attachedUsers();
     std::string attachedUsers();
 
 private:
@@ -17,7 +19,7 @@ private:
     MYSQL_STMT *stmt_; // Объявление указателя на запрос
 
     void create_connection_BD ();
-    void query_to_BD (std::string &query);
+    bool query_to_BD (std::string &query);
     void create_tables ();
-    bool check_user(std::string& data);
+    bool check_user(const std::string &login, const std::string &password);
 };
