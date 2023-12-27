@@ -1,0 +1,41 @@
+{
+    "tasks": [
+        {
+            "label": "build",
+            "type": "shell",
+            "command": "cmake",
+            "args": [
+                "--build",
+                "${workspaceFolder}/build"
+            ],
+            "group": "build"
+        },
+        {
+            "type": "cppbuild",
+            "label": "C/C++: g++ сборка активного файла",
+            "command": "/usr/bin/g++",
+            "args": [
+                "-fdiagnostics-color=always",
+                "-g",
+                "src/*.cpp",
+                "-o",
+                "${workspaceFolder}/build/main",
+                "-I/usr/include/mysql",  // Путь к заголовкам MySQL Connector/C++
+                "-L/usr/lib/x86_64-linux-gnu",  // Путь к библиотекам MySQL Connector/C++
+                "-lmysqlclient"  // Имя библиотеки MySQL Connector/C++
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            },
+            "problemMatcher": [
+                "$gcc"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            },
+            "detail": "Задача создана отладчиком."
+        }        
+    ],
+    "version": "2.0.0"
+}
