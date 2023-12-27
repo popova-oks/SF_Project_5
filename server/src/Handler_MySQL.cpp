@@ -15,7 +15,7 @@ void Handler_MySQL::create_connection_BD() {
         std::cout << "Error: can't create MySQL-descriptor" << std::endl;
     }
     // Подключаемся к серверу
-    if(!mysql_real_connect(mysql_, "localhost", "root", "HazovA", "project_5", NULL, NULL, 0)) {
+    if(!mysql_real_connect(mysql_, "localhost", "root", "root", "project_5", NULL, NULL, 0)) {
         // Если нет возможности установить соединение с БД выводим сообщение об ошибке
         std::cout << "Error: can't connect to database " << mysql_error(mysql_) << std::endl;
     }
