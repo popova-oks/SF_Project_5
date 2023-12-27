@@ -84,10 +84,19 @@ bool User::update(int event) {
     }
 }
 
+/*
 void User::show_messFromServer() {
     std::string mess = messages_->recive_message();
     if(!mess.empty()) {
         std::cout << mess << std::endl;
+    }
+}
+*/
+
+std::string User::get_messFromServer() {
+    std::string mess = messages_->recive_message();
+    if(!mess.empty()) {
+        return mess;
     }
 }
 

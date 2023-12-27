@@ -5,8 +5,9 @@
 class ClientCode {
   public:
     void start();
-    User* make_user(User* user);
-    User* attach_toChat(User *user);
-    User* detach_toChat(User *user);
-    //User* login_user();
+  private:
+    //void make_user(User* user);
+    //void attach_toChat(User *user);
+    //void detach_toChat(User *user);
+    void answFromServ(User *user);
 };

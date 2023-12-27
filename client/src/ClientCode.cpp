@@ -39,32 +39,29 @@ void ClientCode::start() {
 
         switch(ch) {
         case '1': {
-            user = make_user(user);
-            if(user != nullptr) {
-                //std::cout << "\nUser was created!" << std::endl;
-                //std::cout << "\nAttached users:" << std::endl;
-                user->show_messFromServer();
-            }
+            user->update(1);
+            // user->show_messFromServer();
+            answFromServ(user);
             break;
         }
         case '2': {
-            user = attach_toChat(user);
-            if(user != nullptr) {
-                //std::cout << "\nAttached users:" << std::endl;
-                user->show_messFromServer();
-            }
+            user->update(2);
+            // user->show_messFromServer();
+            answFromServ(user);
             break;
         }
         case '3': {
-            
+
             break;
         }
         case '4': {
-            user = detach_toChat(user);
-            if(user != nullptr) {
-                //std::cout << "\nAttached users:" << std::endl;
-                user->show_messFromServer();
+            user->update(4);
+            // user->show_messFromServer();
+            std::string answ = user->get_messFromServer();
+            if(answ != "Fail!") {
+                user->set_empty_login();
             }
+            std::cout << answ << std::endl;
             break;
         }
         /*
@@ -126,7 +123,8 @@ void ClientCode::start() {
     std::cout << "\nSee you soon agan! " << std::endl;
 }
 
-User* ClientCode::make_user(User* user) {
+/*
+void ClientCode::make_user(User* user) {
     if(user->update(1)) {
         return user;
     } else {
@@ -134,7 +132,7 @@ User* ClientCode::make_user(User* user) {
     }
 }
 
-User* ClientCode::attach_toChat(User* user) {
+void ClientCode::attach_toChat(User* user) {
     if(user->update(2)) {
         return user;
     } else {
@@ -142,12 +140,21 @@ User* ClientCode::attach_toChat(User* user) {
     }
 }
 
-User* ClientCode::detach_toChat(User* user) {
+void ClientCode::detach_toChat(User* user) {
     if(user->update(4)) {
         return user;
     } else {
         return nullptr;
     }
+}
+*/
+
+void ClientCode::answFromServ(User* user) {
+    std::string answ = user->get_messFromServer();
+    if(answ == "Fail!") {
+        user->set_empty_login();
+    }
+    std::cout << answ << std::endl;
 }
 
 /*

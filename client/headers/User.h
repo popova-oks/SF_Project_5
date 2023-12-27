@@ -9,12 +9,14 @@ class User : public IObserver {
     User();
     virtual ~User() {}
     bool update (int event) override;
-    void show_messFromServer();
+    std::string get_messFromServer() override;
+    //void show_messFromServer();
     void show_attachedUser();
 
     //void display_Messages();
 
-    const std::string& get_login() const override { return login_; }
+    const std::string& get_login() { return login_; }
+    void set_empty_login() {login_.clear();}
   /*
     const std::string& get_name() const override { return name_; }
     

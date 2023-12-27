@@ -45,7 +45,7 @@ bool Handler_MySQL::add_User(const std::string& data) {
     std::string data2 = data.substr(pos);
 
     // Присоединение пользователя к чату
-    if (attach_User(data2)) {
+    if(attach_User(data2)) {
         return true;
     } else {
         return false;
@@ -133,10 +133,14 @@ bool Handler_MySQL::check_user(const std::string& login, const std::string& pass
 
     mysql_query(mysql_, query_toBD.c_str()); //Делаем запрос к таблице
     if(res_ = mysql_store_result(mysql_)) {
-        return true;
-    } else {
-        return false;
+        MYSQL_ROW row = mysql_fetch_row(res_);
+        if(row) {
+            return true;
+        } else {
+            return false;
+        }
     }
+    return false;
 }
 
 std::string Handler_MySQL::attachedUsers() {
