@@ -50,12 +50,6 @@ bool Handler_MySQL::add_User(const std::string& data) {
     } else {
         return false;
     }
-    /*
-    std::string query_toBD2 = "UPDATE users SET attach=TRUE WHERE login=";
-    query_toBD2.append(login.c_str());
-    //query_toBD2.append("'");
-    query_to_BD(query_toBD2);
-    */
 }
 
 bool Handler_MySQL::attach_User(const std::string& data) {
@@ -103,26 +97,6 @@ bool Handler_MySQL::detach_User(const std::string& data) {
         return false;
     }
 }
-
-/*
-void Handler_MySQL::show_attachedUsers() {
-    mysql_query(mysql_,
-                "SELECT * FROM users WHERE attach=TRUE"); //Делаем запрос к таблице
-    if(res_ = mysql_store_result(mysql_)) {
-        MYSQL_ROW row; // Объявление строки результата
-        while(row = mysql_fetch_row(res_)) { //Выводим все что есть в таблице через цикл
-            for(int i = 0; i < mysql_num_fields(res_); i++) {
-                std::cout << row[i] << "  ";
-            }
-            std::cout << std::endl;
-        }
-    } else {
-        std::cout << "Ошибка MySql номер " << mysql_error(mysql_);
-    }
-    // Освобождаем память, занятую результирующей таблицей
-    mysql_free_result(res_);
-}
-*/
 
 bool Handler_MySQL::check_user(const std::string& login, const std::string& password) {
     std::string users;

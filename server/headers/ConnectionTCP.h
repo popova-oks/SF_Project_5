@@ -7,7 +7,6 @@
 #include <netinet/in.h>
 #include <sys/socket.h>
 
-//#define CL_PORT 7772
 #define SV_PORT 7777
 #define MESSAGE_LENGTH 1024
 

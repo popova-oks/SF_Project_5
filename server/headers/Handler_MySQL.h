@@ -10,10 +10,9 @@ class Handler_MySQL {
     bool attach_User(const std::string& data);
     bool detach_User(const std::string& data);
     bool add_message(const std::string& data);
-    // void show_attachedUsers();
+  
     std::string attachedUsers();
     std::string get_mess_forUser(const std::string &data);
-
   private:
     // Объекты для работы с БД
     MYSQL* mysql_;
