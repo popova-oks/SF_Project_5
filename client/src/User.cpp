@@ -68,7 +68,7 @@ void User::update(int event) {
         }
         if(messages_->send_message(mess_new_user) >= 0) {
             login_ = login;
-        } 
+        }
     } else if(event == 3) {
         char act;
         std::cout << "\nEnter an action: s - send a message, r - recive messages: ";
@@ -82,37 +82,39 @@ void User::update(int event) {
                              "symbols!\n";
                 std::cout << "\nSend to a user. Enter login : ";
                 std::cin >> login;
+
                 OnlyLettersNum = containsOnlyLettersNum(login);
                 if(!OnlyLettersNum) {
                     continue;
                 }
             }
-            std::cout << "Enter your message: ";
-            std::cin.ignore(32767, '\n');
-            //std::cin.clear();
             std::string message;
-            std::getline(std::cin, message);
+            // cin.get();
+            std::cout << "Enter your message: ";
+            // std::cin.ignore(32767, '\n');            
+            std::getline(std::cin >> std::ws, message);
 
             std::string mess_for_user = "3'" + login_ + "', '" + login + "', '" + message + "'";
             // отсылаем сообщение серверу
-            //if(messages_->send_message(mess_for_user) >= 0) {
-                messages_->send_message(mess_for_user);
-                //std::cout << std::endl;
+            // if(messages_->send_message(mess_for_user) >= 0) {
+            messages_->send_message(mess_for_user);
+            //std::cout << "Enter!" << std::endl;
             //}
         } else if(act == 'r') {
             std::string mess = "9'" + login_ + "'";
-            //if(messages_->send_message(mess) >= 0) {
-                messages_->send_message(mess);
-                std::cout << "Your messages:" << std::endl;
+            // if(messages_->send_message(mess) >= 0) {
+            messages_->send_message(mess);
+            std::cout << "Your messages:" << std::endl;
             //}
         }
     } else if(event == 5) {
-        //if(messages_->send_message("exit") >= 0) {
-            messages_->send_message("exit");
-            //std::cout << std::endl;
+        // if(messages_->send_message("exit") >= 0) {
+        messages_->send_message("exit");
+        // std::cout << std::endl;
         //}
     } else {
         std::cout << "\nTry agan!\n";
+        messages_->send_message("0");
     }
 }
 

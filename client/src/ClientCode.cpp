@@ -17,10 +17,6 @@ void ClientCode::start() {
     user = new User;
 
     while(flag) {
-        if(user == nullptr) {
-            return;
-        }
-
         std::cout << "\nAttached users:" << std::endl;
         user->show_attachedUser();
 
@@ -55,6 +51,8 @@ void ClientCode::start() {
             if(!user->get_login().empty()) {
                 user->update(3);
                 answFromServ(user);
+            } else {
+                user->update(0);
             }
             break;
         }
