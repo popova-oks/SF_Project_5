@@ -8,7 +8,7 @@ class User : public IObserver {
   public:
     User();
     virtual ~User() {}
-    bool update (int event) override;
+    void update (int event) override;
     std::string get_messFromServer() override;
     //void show_messFromServer();
     void show_attachedUser();

@@ -56,6 +56,11 @@ bool Chat::notify() {
                 break;
             }
             case 3: {
+                if (handler_mysql_->add_message(mess_from_client)){
+                    send_toClient("Message was saved!");
+                } else {
+                    send_toClient("Fail!");
+                }
                 break;
             }
             case 4: {
@@ -64,6 +69,16 @@ bool Chat::notify() {
                 } else {
                     send_toClient("Fail!");
                 }                
+                break;
+            }
+            case 9: {
+                //attach_User(mess_from_client);
+                std::string messages = handler_mysql_->get_mess_forUser(mess_from_client);
+                if (!messages.empty()) {
+                    send_toClient(messages);
+                } else {
+                    send_toClient("Fail!");
+                }
                 break;
             }
             default: {

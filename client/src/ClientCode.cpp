@@ -33,7 +33,8 @@ void ClientCode::start() {
         }
         std::cout << "\n\nSelect an action:" << std::endl;
         std::cout << "1 - registration, 2 - attach in the chat,";
-        std::cout << "\n3 - send messages, 4 - exit the chat,  5 - quit from the program: ";
+        std::cout
+            << "\n3 - send or recive messages, 4 - exit the chat,  5 - quit from the program: ";
         char ch;
         std::cin >> ch;
 
@@ -51,7 +52,10 @@ void ClientCode::start() {
             break;
         }
         case '3': {
-
+            if(!user->get_login().empty()) {
+                user->update(3);
+                answFromServ(user);
+            }
             break;
         }
         case '4': {
@@ -64,42 +68,6 @@ void ClientCode::start() {
             std::cout << answ << std::endl;
             break;
         }
-        /*
-        case '2': {
-            chat->display_listObservers();
-            if(chat->is_Users()) {
-                user = login_user(chat);
-                if(user != nullptr) {
-                    user->display_Messages();
-                }
-            } else {
-                std::cout << "\nUsers were not found!\nYou'll need to register in the chat!\n";
-            }
-            break;
-        }
-        case '3': {
-            chat->display_listObservers();
-            if(user == nullptr) {
-                std::cout << "\nYou need to log in!";
-            } else {
-                if(chat->is_Observes()) {
-                    user->exchange_messages();
-                } else {
-                    std::cout << "\nNo authorized users!\n";
-                }
-            }
-            break;
-        }
-        case '4': {
-            if(user == nullptr) {
-                std::cout << "\nYou need to log in!";
-            } else {
-                user->leave_chat(chat);
-                user = nullptr;
-            }
-            break;
-        }
-        */
         case '5': {
             flag = false;
             if(user != nullptr) {

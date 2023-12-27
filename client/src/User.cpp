@@ -5,7 +5,7 @@
 
 User::User() { messages_ = new Messages<std::string>(); }
 
-bool User::update(int event) {
+void User::update(int event) {
     if(event == 1) {
         std::string name;
         std::string login;
@@ -20,7 +20,7 @@ bool User::update(int event) {
             if(!OnlyLettersNum) {
                 continue;
             }
-            std::cout << "Enter your username: ";
+            std::cout << "Enter your login: ";
             std::cin >> login;
             OnlyLettersNum = containsOnlyLettersNum(login);
             if(!OnlyLettersNum) {
@@ -38,9 +38,6 @@ bool User::update(int event) {
         std::string mess_new_user = "1'" + name + "', '" + login + "', '" + password + "'";
         if(messages_->send_message(mess_new_user) >= 0) {
             login_ = login;
-            return true;
-        } else {
-            return false;
         }
     } else if(event == 2 || event == 4) {
         std::string login;
@@ -49,7 +46,7 @@ bool User::update(int event) {
         while(!OnlyLettersNum) {
             std::cout << "\nEnter only letters or numbers without using spaces or other symbols!\n";
 
-            std::cout << "Enter your username: ";
+            std::cout << "Enter your login: ";
             std::cin >> login;
             OnlyLettersNum = containsOnlyLettersNum(login);
             if(!OnlyLettersNum) {
@@ -66,21 +63,56 @@ bool User::update(int event) {
         std::string mess_new_user;
         if(event == 2) {
             mess_new_user = "2'" + login + "', '" + password + "'";
-        } else if (event == 4) {
+        } else if(event == 4) {
             mess_new_user = "4'" + login + "', '" + password + "'";
         }
         if(messages_->send_message(mess_new_user) >= 0) {
             login_ = login;
-            return true;
-        } else {
-            return false;
-        }
+        } 
     } else if(event == 3) {
-        
-    } else if(event == 5) {
-        if(messages_->send_message("exit") >= 0) {
-            return true;
+        char act;
+        std::cout << "\nEnter an action: s - send a message, r - recive messages: ";
+        std::cin >> act;
+
+        if(act == 's') {
+            std::string login;
+            bool OnlyLettersNum = false;
+            while(!OnlyLettersNum) {
+                std::cout << "\nEnter only letters or numbers without using spaces or other "
+                             "symbols!\n";
+                std::cout << "\nSend to a user. Enter login : ";
+                std::cin >> login;
+                OnlyLettersNum = containsOnlyLettersNum(login);
+                if(!OnlyLettersNum) {
+                    continue;
+                }
+            }
+            std::cout << "Enter your message: ";
+            std::cin.ignore(32767, '\n');
+            //std::cin.clear();
+            std::string message;
+            std::getline(std::cin, message);
+
+            std::string mess_for_user = "3'" + login_ + "', '" + login + "', '" + message + "'";
+            // отсылаем сообщение серверу
+            //if(messages_->send_message(mess_for_user) >= 0) {
+                messages_->send_message(mess_for_user);
+                //std::cout << std::endl;
+            //}
+        } else if(act == 'r') {
+            std::string mess = "9'" + login_ + "'";
+            //if(messages_->send_message(mess) >= 0) {
+                messages_->send_message(mess);
+                std::cout << "Your messages:" << std::endl;
+            //}
         }
+    } else if(event == 5) {
+        //if(messages_->send_message("exit") >= 0) {
+            messages_->send_message("exit");
+            //std::cout << std::endl;
+        //}
+    } else {
+        std::cout << "\nTry agan!\n";
     }
 }
 
@@ -95,13 +127,10 @@ void User::show_messFromServer() {
 
 std::string User::get_messFromServer() {
     std::string mess = messages_->recive_message();
-    if(!mess.empty()) {
-        return mess;
-    }
+    return mess;
 }
 
-void User::show_attachedUser()
-{
+void User::show_attachedUser() {
     std::string users = messages_->recive_message();
     if(!users.empty()) {
         std::cout << users << std::endl;

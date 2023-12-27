@@ -14,6 +14,7 @@ class Chat : public ISubject {
     //void display_listObservers();
     void send_listUsers_toClient();
     void send_toClient(std::string mess);
+    
   /*    
     
     void attach(IObserver* observer) override;

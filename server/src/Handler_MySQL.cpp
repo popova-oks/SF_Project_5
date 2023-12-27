@@ -135,8 +135,12 @@ bool Handler_MySQL::check_user(const std::string& login, const std::string& pass
     if(res_ = mysql_store_result(mysql_)) {
         MYSQL_ROW row = mysql_fetch_row(res_);
         if(row) {
+            // Освобождаем память, занятую результирующей таблицей
+            mysql_free_result(res_);
             return true;
         } else {
+            // Освобождаем память, занятую результирующей таблицей
+            mysql_free_result(res_);
             return false;
         }
     }
@@ -158,7 +162,7 @@ std::string Handler_MySQL::attachedUsers() {
                     users.append("\t");
                 }
             }
-            std::cout << std::endl;
+            // std::cout << std::endl;
         }
     } else {
         std::cout << "Ошибка MySql номер " << mysql_error(mysql_);
@@ -168,9 +172,103 @@ std::string Handler_MySQL::attachedUsers() {
     return users;
 }
 
+bool Handler_MySQL::add_message(const std::string& data) {
+    // Получить логин отправителя из строки data
+    int pos = 0;
+    int count = data.find("', '", pos) + 1;
+    std::string sender = data.substr(pos, count);
+
+    // Получить логин получателя из строки data
+    pos = data.find("', '") + 3;
+    count = data.find("', '", pos) - pos + 1;
+    std::string reciver = data.substr(pos, count);
+
+    std::string query_toBD = "SELECT id FROM users WHERE login=";
+    query_toBD.append(sender.c_str());
+
+    std::string id_sender;
+    mysql_query(mysql_, query_toBD.c_str()); //Делаем запрос к таблице
+    if(res_ = mysql_store_result(mysql_)) {
+        MYSQL_ROW row;
+        while(row = mysql_fetch_row(res_)) {
+            for(int i = 0; i < mysql_num_fields(res_); i++) {
+                id_sender.append(row[i]);
+            }
+        }
+    } else {
+        std::cout << "Ошибка MySql номер " << mysql_error(mysql_);
+    }
+    // Освобождаем память, занятую результирующей таблицей
+    mysql_free_result(res_);
+
+    std::string query_toBD2 = "SELECT id FROM users WHERE login=";
+    query_toBD2.append(reciver.c_str());
+    std::string id_reciver;
+    mysql_query(mysql_, query_toBD2.c_str()); //Делаем запрос к таблице
+    if(res_ = mysql_store_result(mysql_)) {
+        MYSQL_ROW row;
+        while(row = mysql_fetch_row(res_)) {
+            for(int i = 0; i < mysql_num_fields(res_); i++) {
+                id_reciver.append(row[i]);
+            }
+        }
+    } else {
+        std::cout << "Ошибка MySql номер " << mysql_error(mysql_);
+    }
+    // Освобождаем память, занятую результирующей таблицей
+    mysql_free_result(res_);
+
+    // Получить сщщбщение из строки data
+    pos = pos + count + 2;
+    std::string message = data.substr(pos);
+
+    std::string query_toBD3 = "INSERT messages (id_sender, id_reciver, message) VALUES (";
+    query_toBD3.append(id_sender.c_str());
+    query_toBD3.append(", ");
+    query_toBD3.append(id_reciver.c_str());
+    query_toBD3.append(", ");
+    query_toBD3.append(message.c_str());
+    query_toBD3.append(")");
+    if(query_to_BD(query_toBD3)) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+std::string Handler_MySQL::get_mess_forUser(const std::string& data) {
+    std::string query_toBD = "SELECT login, messages.message FROM users JOIN messages ON "
+                             "users.id = messages.id_sender "
+                             "WHERE messages.id_reciver = (SELECT id FROM users WHERE login=";
+    query_toBD.append(data.c_str());
+    query_toBD.append(")");
+
+    std::string mess_forUser;
+    mysql_query(mysql_, query_toBD.c_str()); //Делаем запрос к таблице
+    if(res_ = mysql_store_result(mysql_)) {
+        MYSQL_ROW row;
+        while(row = mysql_fetch_row(res_)) {
+            for(int i = 0; i < mysql_num_fields(res_); i++) {
+                mess_forUser.append(row[i]);
+                if((i + 1) % 2 == 0) {
+                    mess_forUser.append("\n");
+                } else {
+                    mess_forUser.append("\t");
+                }
+            }
+        }
+    } else {
+        std::cout << "Ошибка MySql номер " << mysql_error(mysql_);
+    }
+    // Освобождаем память, занятую результирующей таблицей
+    mysql_free_result(res_);
+    return mess_forUser;
+}
+
 void Handler_MySQL::create_tables() {
     std::string query_toBD1 =
-        "CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) NOT "
+        "CREATE TABLE IF NOT EXISTS users(id INT AUTO_INCREMENT PRIMARY KEY, name VARCHAR(100) "
+        "NOT "
         "NULL, login VARCHAR(100) UNIQUE NOT NULL, password VARCHAR(100) NOT NULL, "
         "attach BOOLEAN DEFAULT(FALSE) NOT NULL)";
 
