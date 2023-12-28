@@ -47,7 +47,7 @@ bool Chat::notify() {
             }
             case 3: {
                 if (handler_mysql_->add_message(mess_from_client)){
-                    send_toClient("Message was saved! Tape ENTER!");
+                    send_toClient("Message was saved! Then click ENTER!");
                 } else {
                     send_toClient("Fail!");
                 }
